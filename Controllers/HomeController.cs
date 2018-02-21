@@ -10,28 +10,64 @@ namespace DotaAPI.Controllers
 {
     public class HomeController : Controller
     {
+
+        private DotaContext _context;
+
+        public HomeController(DotaContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
-            return View();
+            List<Hero> allHeroes = _context.Heroes.ToList();
+            List<HeroWithSpells> result = new List<HeroWithSpells>();
+            foreach(Hero h in allHeroes)
+            {
+                List<Spell> spells = _context.Spells.Where(s => s.hero_id == h.id).ToList();
+                result.Add(addSpells(h, spells));
+            }
+            return Json(result);
         }
 
-        public IActionResult About()
+        [Route("hero/{id}")]
+        public IActionResult Hero(int id)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
+            HeroWithSpells result = addSpells(thisHero, _context.Spells.Where(s => s.hero_id == id).ToList());
+            return Json(result);
         }
 
-        public IActionResult Contact()
+        [Route("spell/{id}")]
+        public IActionResult Spell(int id)
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
+            //should create version that includes hero name
+            return Json(thisSpell);
         }
 
-        public IActionResult Error()
+
+        public HeroWithSpells addSpells(Hero temp, List<Spell> spells)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            HeroWithSpells result = new HeroWithSpells(){
+                id = temp.id,
+                name = temp.name,
+                attribute = temp.attribute,
+                intelligence = temp.intelligence,
+                agility = temp.agility,
+                strength = temp.strength,
+                attack = temp.attack,
+                speed = temp.speed,
+                armor = temp.armor,
+                bio = temp.bio,
+                attack_type = temp.attack_type,
+                sight_range = temp.sight_range,
+                attack_range = temp.attack_range,
+                missile_speed = temp.missile_speed,
+                version = temp.version,
+                spells = spells
+            };
+            return result;
         }
+
     }
 }
