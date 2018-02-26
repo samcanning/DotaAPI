@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<h2>Login</h2>
+<form asp-controller="Admin" asp-action="Login" method='post'>
+    Username: <input type="text" name='username'></br><br>
+    Password: <input type='password' name='password'><br><br>
+    <input type='submit' value='Login'>
+</form>

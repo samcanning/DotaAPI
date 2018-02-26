@@ -7,5 +7,6 @@ namespace DotaAPI.Models
         public DotaContext(DbContextOptions<DotaContext> options) : base(options) { }
         public DbSet<Hero> Heroes {get;set;}
         public DbSet<Spell> Spells {get;set;}
+        public DbSet<Admin> Admins {get;set;}
     }
 }

@@ -1,0 +1,27 @@
+@model DotaAPI.Models.Hero
+@{
+    ViewData["Title"] = "Add Hero";
+}
+<form asp-action="CreateHero" asp-controller="Admin" method="post">
+    <p>name</p> <input asp-for="name"><br><br>
+    <p>attribute</p> <select asp-for='attribute'>
+        <option value='Strength'>strength</option>
+        <option value='Intelligence'>intelligence</option>
+        <option value='Agility'>agility</option>
+    </select><br><br>
+    <p>intelligence</p> <input asp-for='intelligence'><br><br>
+    <p>agility</p> <input asp-for='agility'><br><br>
+    <p>strength</p> <input asp-for='strength'><br><br>
+    <p>attack</p> <input asp-for='attack'><br><br>
+    <p>speed</p> <input asp-for='speed'><br><br>
+    <p>armor</p> <input asp-for='armor'><br><br>
+    <p>bio</p> <input asp-for='bio'><br><br>
+    <p>attack_type</p> <select asp-for='attack_type'>
+        <option value='Melee'>Melee</option>
+        <option value='Ranged'>Ranged</option>
+    </select><br><br>
+    <p>sight_range</p> <input asp-for='sight_range'><br><br>
+    <p>attack_range</p> <input asp-for='attack_range'><br><br>
+    <p>missile_speed</p> <input asp-for='missile_speed'><br><br>
+    <input type='submit'>
+</form>

@@ -24,6 +24,7 @@ namespace DotaAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession();
             services.AddDbContext<DotaContext>(options => options.UseMySQL(Configuration["DBInfo:ConnectionString"]));
         }
 
@@ -39,6 +40,7 @@ namespace DotaAPI
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
