@@ -1,12 +1,15 @@
+using Newtonsoft.Json.Linq;
+
 namespace DotaAPI.Models
 {
-    public class Spell
+    public class DisplaySpell
     {
         public int id {get;set;}
         public string name {get;set;}
         public string description {get;set;}
-        public string details {get;set;}
+        public JObject details {get;set;}
         public int hero_id {get;set;}
-        public int ultimate {get;set;}
+        public bool ultimate {get;set;}
+
     }
 }

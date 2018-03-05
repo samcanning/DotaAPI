@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using DotaAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json.Linq;
 
 namespace DotaAPI.Controllers
 {
@@ -72,7 +73,7 @@ namespace DotaAPI.Controllers
                 sight_range = newHero.sight_range,
                 attack_type = newHero.attack_type,
                 missile_speed = newHero.missile_speed,
-                version = (decimal)7.09
+                version = (decimal)7.10
             };
             _context.Add(heroToAdd);
             _context.SaveChanges();

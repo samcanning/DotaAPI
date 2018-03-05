@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DotaAPI.Models;
+using Newtonsoft.Json.Linq;
 
 namespace DotaAPI.Controllers
 {
@@ -67,6 +68,27 @@ namespace DotaAPI.Controllers
                 spells = spells
             };
             return result;
+        }
+
+        [Route("test/{id}")]
+        public IActionResult Test(int id)
+        {
+            Spell selected = _context.Spells.Single(s => s.id == id);
+            return Json(Convert(selected));
+        }
+
+        public DisplaySpell Convert(Spell input)
+        {
+            DisplaySpell display = new DisplaySpell(){
+                id = input.id,
+                name = input.name,
+                description = input.description,
+                details = JObject.Parse(input.details),
+                hero_id = input.hero_id
+            };
+            if(input.ultimate == 1) display.ultimate = true;
+            else display.ultimate = false;
+            return display;
         }
 
     }
