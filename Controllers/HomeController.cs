@@ -18,19 +18,19 @@ namespace DotaAPI.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            List<Hero> allHeroes = _context.Heroes.ToList();
-            List<HeroWithSpells> result = new List<HeroWithSpells>();
-            foreach(Hero h in allHeroes)
-            {
-                List<Spell> spells = _context.Spells.Where(s => s.hero_id == h.id).ToList();
-                result.Add(addSpells(h, spells));
-            }
-            return Json(result);
-        }
+        // public IActionResult Index()
+        // {
+        //     List<Hero> allHeroes = _context.Heroes.ToList();
+        //     List<HeroWithSpells> result = new List<HeroWithSpells>();
+        //     foreach(Hero h in allHeroes)
+        //     {
+        //         List<Spell> spells = _context.Spells.Where(s => s.hero_id == h.id).ToList();
+        //         result.Add(addSpells(h, spells));
+        //     }
+        //     return Json(result);
+        // }
 
-        [Route("hero/{id}")]
+        [Route("api/hero/{id}")]
         public IActionResult Hero(int id)
         {
             Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
@@ -38,7 +38,7 @@ namespace DotaAPI.Controllers
             return Json(result);
         }
 
-        [Route("spell/{id}")]
+        [Route("api/spell/{id}")]
         public IActionResult Spell(int id)
         {
             Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
@@ -61,21 +61,16 @@ namespace DotaAPI.Controllers
                 armor = temp.armor,
                 bio = temp.bio,
                 attack_type = temp.attack_type,
-                sight_range = temp.sight_range,
-                attack_range = temp.attack_range,
-                missile_speed = temp.missile_speed,
-                version = temp.version,
-                spells = spells
+                attack_range = temp.attack_range
             };
+            List<DisplaySpell> displays = new List<DisplaySpell>();
+            foreach(Spell s in spells)
+            {
+                displays.Add(Convert(s));
+            }
+            result.spells = displays;
             return result;
-        }
-
-        [Route("test/{id}")]
-        public IActionResult Test(int id)
-        {
-            Spell selected = _context.Spells.Single(s => s.id == id);
-            return Json(Convert(selected));
-        }
+        }        
 
         public DisplaySpell Convert(Spell input)
         {

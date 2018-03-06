@@ -1,0 +1,39 @@
+@model List<List<DotaAPI.Models.DisplaySpell>>
+<h3>Regular spells</h3>
+<select>
+    <option></option>
+    @{
+        foreach(var x in Model.First())
+        {
+            <option>@x.name</option>
+        }
+    }
+</select>
+<select>
+    <option></option>
+    @{
+        foreach(var x in Model.First())
+        {
+            <option>@x.name</option>
+        }
+    }
+</select>
+<select>
+    <option></option>
+    @{
+        foreach(var x in Model.First())
+        {
+            <option>@x.name</option>
+        }
+    }
+</select>
+<h3>Ultimates</h3>
+<select>
+    <option></option>
+    @{
+        foreach(var x in Model.Last())
+        {
+            <option>@x.name</option>
+        }
+    }
+</select>

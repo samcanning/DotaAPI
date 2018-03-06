@@ -70,10 +70,7 @@ namespace DotaAPI.Controllers
                 armor = newHero.armor,
                 bio = newHero.bio,
                 attack_range = newHero.attack_range,
-                sight_range = newHero.sight_range,
                 attack_type = newHero.attack_type,
-                missile_speed = newHero.missile_speed,
-                version = (decimal)7.10
             };
             _context.Add(heroToAdd);
             _context.SaveChanges();

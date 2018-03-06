@@ -13,10 +13,7 @@ namespace DotaAPI.Models
         public decimal armor {get;set;}
         public string bio {get;set;}
         public string attack_type {get;set;}
-        public string sight_range {get;set;}
         public int attack_range {get;set;}
-        public int missile_speed {get;set;}
-        public decimal version {get;set;}
 
     }
 }
