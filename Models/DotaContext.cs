@@ -8,5 +8,6 @@ namespace DotaAPI.Models
         public DbSet<Hero> Heroes {get;set;}
         public DbSet<Spell> Spells {get;set;}
         public DbSet<Admin> Admins {get;set;}
+        public DbSet<New_Hero> New_Heroes {get;set;}
     }
 }
