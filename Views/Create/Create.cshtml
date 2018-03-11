@@ -1,39 +1,56 @@
-@model List<List<DotaAPI.Models.DisplaySpell>>
-<h3>Regular spells</h3>
-<select>
-    <option></option>
-    @{
-        foreach(var x in Model.First())
-        {
-            <option>@x.name</option>
+@model DotaAPI.Models.NewHeroValidator
+<form asp-controller="Create" asp-action="Submit" method="POST">
+    <h3>Base Hero</h3>
+    <select name="hero_id">
+        <option value="0"></option>
+        @{
+            foreach(var x in ViewBag.heroes)
+            {
+                <option value="@x.id">@x.name</option>
+            }
         }
-    }
-</select>
-<select>
-    <option></option>
-    @{
-        foreach(var x in Model.First())
-        {
-            <option>@x.name</option>
+    </select> <span asp-validation-for="hero_id"></span>
+    <h3>Name</h3>
+    <input type="text" name="name"> <span asp-validation-for="name"></span>
+    <h3>Biography <span style="font-size: 10pt">(optional)</span></h3> 
+    <textarea name="bio">@ViewBag.bio</textarea> <span asp-validation-for="bio"></span>
+    <h3>Regular spells</h3>
+    <select name="spell_1">
+        <option value='0'></option>
+        @{
+            foreach(var x in ViewBag.regulars)
+            {
+                <option value="@x.id">@x.name</option>
+            }
         }
-    }
-</select>
-<select>
-    <option></option>
-    @{
-        foreach(var x in Model.First())
-        {
-            <option>@x.name</option>
+    </select>
+    <select name="spell_2">
+        <option value='0'></option>
+        @{
+            foreach(var x in ViewBag.regulars)
+            {
+                <option value="@x.id">@x.name</option>
+            }
         }
-    }
-</select>
-<h3>Ultimates</h3>
-<select>
-    <option></option>
-    @{
-        foreach(var x in Model.Last())
-        {
-            <option>@x.name</option>
+    </select>
+    <select name="spell_3">
+        <option value='0'></option>
+        @{
+            foreach(var x in ViewBag.regulars)
+            {
+                <option value="@x.id">@x.name</option>
+            }
         }
-    }
-</select>
+    </select> <span asp-validation-for="spell_1"></span>
+    <h3>Ultimates</h3>
+    <select name="spell_4">
+        <option value='0'></option>
+        @{
+            foreach(var x in ViewBag.ultimates)
+            {
+                <option value="@x.id">@x.name</option>
+            }
+        }
+    </select> <span asp-validation-for="spell_4"></span><br><br>
+    <input type="submit">
+</form>

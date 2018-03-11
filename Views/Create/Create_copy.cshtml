@@ -1,0 +1,45 @@
+@model List<List<DotaAPI.Models.DisplaySpell>>
+<form asp-controller="Create" asp-action="Create">
+<h3>Name</h3>
+<input type="text" name="name">
+<h3>Biography <span style="font-size: 10pt">(optional)</span></h3> 
+<textarea name="bio"></textarea>
+<h3>Regular spells</h3>
+    <select name="spell_1">
+        <option></option>
+        @{
+            foreach(var x in Model.First())
+            {
+                <option value="@x.id">@x.name</option>
+            }
+        }
+    </select>
+    <select name="spell_2">
+        <option></option>
+        @{
+            foreach(var x in Model.First())
+            {
+                <option value="@x.id">@x.name</option>
+            }
+        }
+    </select>
+    <select name="spell_3">
+        <option></option>
+        @{
+            foreach(var x in Model.First())
+            {
+                <option value="@x.id">@x.name</option>
+            }
+        }
+    </select>
+    <h3>Ultimates</h3>
+    <select name="spell_4">
+        <option></option>
+        @{
+            foreach(var x in Model.Last())
+            {
+                <option value="@x.id">@x.name</option>
+            }
+        }
+    </select>
+</form>
