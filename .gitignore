@@ -2,3 +2,4 @@ appsettings.json
 bin/
 .vscode/
 obj/
+todolist.txt
