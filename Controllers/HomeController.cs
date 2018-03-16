@@ -61,5 +61,11 @@ namespace DotaAPI.Controllers
             return Json(thisSpell);
         }
 
+        [Route("about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
     }
 }

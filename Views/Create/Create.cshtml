@@ -1,4 +1,7 @@
 @model DotaAPI.Models.NewHeroValidator
+@{
+    ViewData["Title"] = "Create a Hero";
+}
 <form asp-controller="Create" asp-action="Submit" method="POST">
     <h3>Base Hero</h3>
     <select name="hero_id">
