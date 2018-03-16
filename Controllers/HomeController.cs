@@ -28,7 +28,20 @@ namespace DotaAPI.Controllers
         [Route("list")]
         public IActionResult List()
         {
-            return View();
+            return View(_context.New_Heroes.ToList());
+        }
+
+        [Route("hero/{id}")]
+        public IActionResult HeroPage(int id)
+        {
+            New_Hero heroToDisplay = _context.New_Heroes.SingleOrDefault(h => h.id == id);
+            if(heroToDisplay == null) return RedirectToAction("List");
+            Hero baseHero = _context.Heroes.SingleOrDefault(h => h.id == heroToDisplay.hero_id);
+            Spell spell1 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_1_id);
+            Spell spell2 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_2_id);
+            Spell spell3 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_3_id);
+            Spell spell4 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_4_id);
+            return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
         }
 
         [Route("api/hero/{id}")]
@@ -47,46 +60,6 @@ namespace DotaAPI.Controllers
             //should create version that includes hero name
             return Json(thisSpell);
         }
-
-
-        // public HeroWithSpells addSpells(Hero temp, List<Spell> spells)
-        // {
-        //     HeroWithSpells result = new HeroWithSpells(){
-        //         id = temp.id,
-        //         name = temp.name,
-        //         attribute = temp.attribute,
-        //         intelligence = temp.intelligence,
-        //         agility = temp.agility,
-        //         strength = temp.strength,
-        //         attack = temp.attack,
-        //         speed = temp.speed,
-        //         armor = temp.armor,
-        //         bio = temp.bio,
-        //         attack_type = temp.attack_type,
-        //         attack_range = temp.attack_range
-        //     };
-        //     List<DisplaySpell> displays = new List<DisplaySpell>();
-        //     foreach(Spell s in spells)
-        //     {
-        //         displays.Add(Convert(s));
-        //     }
-        //     result.spells = displays;
-        //     return result;
-        // }        
-
-        // public DisplaySpell Convert(Spell input)
-        // {
-        //     DisplaySpell display = new DisplaySpell(){
-        //         id = input.id,
-        //         name = input.name,
-        //         description = input.description,
-        //         details = JObject.Parse(input.details),
-        //         hero_id = input.hero_id
-        //     };
-        //     if(input.ultimate == 1) display.ultimate = true;
-        //     else display.ultimate = false;
-        //     return display;
-        // }
 
     }
 }

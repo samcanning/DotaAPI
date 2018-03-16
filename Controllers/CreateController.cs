@@ -78,13 +78,5 @@ namespace DotaAPI.Controllers
             ViewBag.bio = model.bio;
             return View("Create");
         }
-
-        
-
-        [Route("test")]
-        public IActionResult Test()
-        {
-            return Json(Converter.ConvertHero(2));
-        }
     }
 }

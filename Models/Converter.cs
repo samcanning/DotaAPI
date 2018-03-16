@@ -7,8 +7,6 @@ namespace DotaAPI.Models
     public abstract class Converter
     {
 
-        private static DotaContext _context;
-
         public static DisplaySpell Convert(Spell input)
         {
             DisplaySpell display = new DisplaySpell(){
@@ -47,31 +45,29 @@ namespace DotaAPI.Models
             result.spells = displays;
             return result;
         }
-        public static NewHeroDisplay ConvertHero(int id)
+        public static NewHeroDisplay ConvertHero(New_Hero hero, Hero baseHero, Spell spell1, Spell spell2, Spell spell3, Spell spell4)
         {
-            New_Hero newHero = _context.New_Heroes.SingleOrDefault(n => n.id == id);
-            Hero hero = _context.Heroes.SingleOrDefault(h => h.id == newHero.hero_id);
             NewHeroDisplay display = new NewHeroDisplay()
             {
-                id = newHero.id,
-                name = newHero.name,
-                attribute = hero.attribute,
-                intelligence = hero.intelligence,
-                agility = hero.agility,
-                strength = hero.strength,
-                attack = hero.attack,
-                speed = hero.speed,
-                armor = hero.armor,
-                bio = newHero.bio,
-                attack_type = hero.attack_type,
-                attack_range = hero.attack_range,
-                base_hero = hero.name
+                id = hero.id,
+                name = hero.name,
+                attribute = baseHero.attribute,
+                intelligence = baseHero.intelligence,
+                agility = baseHero.agility,
+                strength = baseHero.strength,
+                attack = baseHero.attack,
+                speed = baseHero.speed,
+                armor = baseHero.armor,
+                bio = hero.bio,
+                attack_type = baseHero.attack_type,
+                attack_range = baseHero.attack_range,
+                base_hero = baseHero.name
             };
             List<DisplaySpell> spells = new List<DisplaySpell>();
-            spells.Add(Converter.Convert(_context.Spells.SingleOrDefault(s => s.id == newHero.spell_1_id)));
-            spells.Add(Converter.Convert(_context.Spells.SingleOrDefault(s => s.id == newHero.spell_2_id)));
-            spells.Add(Converter.Convert(_context.Spells.SingleOrDefault(s => s.id == newHero.spell_3_id)));
-            spells.Add(Converter.Convert(_context.Spells.SingleOrDefault(s => s.id == newHero.spell_4_id)));
+            spells.Add(Converter.Convert(spell1));
+            spells.Add(Converter.Convert(spell2));
+            spells.Add(Converter.Convert(spell3));
+            spells.Add(Converter.Convert(spell4));
             display.spells = spells;
             return display;
         } 

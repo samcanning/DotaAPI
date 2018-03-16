@@ -1,5 +1,9 @@
-@model List<DotaAPI.Models.NewHeroDisplay>
+@model List<DotaAPI.Models.New_Hero>
 @{
     ViewData["Title"] = "View Heroes";
 }
-<p>works</p>
+<h2>Created Heroes</h2>
+@foreach(var x in Model)
+{
+    <p><a href="hero/@x.id">@x.name</a></p>
+}
