@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DotaAPI.Models
 {
     public class New_Hero
     {
         public int id {get;set;}
+        [Required(ErrorMessage = "Your hero must have a name.")]
         public string name {get;set;}
         public string bio {get;set;}
         public int hero_id {get;set;}

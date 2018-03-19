@@ -1,4 +1,4 @@
-@model DotaAPI.Models.NewHeroValidator
+@model DotaAPI.Models.New_Hero
 @{
     ViewData["Title"] = "Create a Hero";
 }
@@ -18,7 +18,7 @@
     <h3>Biography <span style="font-size: 10pt">(optional)</span></h3> 
     <textarea name="bio">@ViewBag.bio</textarea> <span asp-validation-for="bio"></span>
     <h3>Regular spells</h3>
-    <select name="spell_1">
+    <select name="spell_1_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -27,7 +27,7 @@
             }
         }
     </select>
-    <select name="spell_2">
+    <select name="spell_2_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -36,7 +36,7 @@
             }
         }
     </select>
-    <select name="spell_3">
+    <select name="spell_3_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -44,9 +44,9 @@
                 <option value="@x.id">@x.name</option>
             }
         }
-    </select> <span asp-validation-for="spell_1"></span>
+    </select> <span asp-validation-for="spell_1_id"></span>
     <h3>Ultimates</h3>
-    <select name="spell_4">
+    <select name="spell_4_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.ultimates)
@@ -54,6 +54,6 @@
                 <option value="@x.id">@x.name</option>
             }
         }
-    </select> <span asp-validation-for="spell_4"></span><br><br>
+    </select> <span asp-validation-for="spell_4_id"></span><br><br>
     <input type="submit">
 </form>

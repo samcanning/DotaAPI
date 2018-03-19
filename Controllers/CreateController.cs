@@ -34,7 +34,7 @@ namespace DotaAPI.Controllers
 
         [Route("create/submit")]
         [HttpPost]
-        public IActionResult Submit(NewHeroValidator model)
+        public IActionResult Submit(New_Hero model)
         {
             List<DisplaySpell> allSpells = new List<DisplaySpell>();
             foreach(Spell s in _context.Spells)
@@ -48,27 +48,27 @@ namespace DotaAPI.Controllers
             {
                 ModelState.AddModelError("hero_id", "You must select a base for your hero.");
             }
-            if(model.spell_1 == 0 || model.spell_2 == 0 || model.spell_3 == 0)
+            if(model.spell_1_id == 0 || model.spell_2_id == 0 || model.spell_3_id == 0)
             {
-                ModelState.AddModelError("spell_1", "You must select three regular spells.");
+                ModelState.AddModelError("spell_1_id", "You must select three regular spells.");
             }
-            else if(model.spell_1 == model.spell_2 || model.spell_1 == model.spell_3 || model.spell_2 == model.spell_3)
+            else if(model.spell_1_id == model.spell_2_id || model.spell_1_id == model.spell_3_id || model.spell_2_id == model.spell_3_id)
             {
-                ModelState.AddModelError("spell_1", "Cannot use the same spell twice.");
+                ModelState.AddModelError("spell_1_id", "Cannot use the same spell twice.");
             }
-            if(model.spell_4 == 0)
+            if(model.spell_4_id == 0)
             {
-                ModelState.AddModelError("spell_4", "Your hero needs an ultimate.");
+                ModelState.AddModelError("spell_4_id", "Your hero needs an ultimate.");
             }
             if(ModelState.IsValid)
             {
                 New_Hero hero = new New_Hero(){
                     name = model.name,
                     hero_id = model.hero_id,
-                    spell_1_id = model.spell_1,
-                    spell_2_id = model.spell_2,
-                    spell_3_id = model.spell_3,
-                    spell_4_id = model.spell_4
+                    spell_1_id = model.spell_1_id,
+                    spell_2_id = model.spell_2_id,
+                    spell_3_id = model.spell_3_id,
+                    spell_4_id = model.spell_4_id
                 };
                 if(model.bio.Length > 0) hero.bio = model.bio;
                 _context.Add(hero);
