@@ -3,7 +3,7 @@
     ViewData["Title"] = Model.name;
 }
 <h2>@Model.name</h2>
-<p>Base Hero: @Model.base_hero</p>
+<p>Base Hero: <a href="/base/hero/@ViewBag.base_id">@Model.base_hero</a></p>
 @if(Model.bio != null)
 {
     <h3>Bio</h3>
@@ -12,6 +12,6 @@
 <h3>Spells</h3>
 @foreach(var x in Model.spells)
 {
-    <p>@x.name</p>
+    <p><a href="/base/spell/@x.id">@x.name</a></p>
 }
 <p><a href="list">Back</a></p>

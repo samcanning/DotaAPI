@@ -1,0 +1,34 @@
+@model DotaAPI.Models.HeroWithSpells
+@{
+    ViewData["Title"] = Model.name;
+}
+<h2>@Model.name</h2>
+<h3>Stats</h3>
+<p>Primary attribute: @Model.attribute</p>
+<p>Intelligence: @Model.intelligence</p>
+<p>Agility: @Model.agility</p>
+<p>Strength: @Model.strength</p>
+<p>Speed: @Model.speed</p>
+<p>Armor: @Model.armor</p>
+<p>Damage: @Model.attack</p>
+<p>Attack type: @Model.attack_type</p>
+@if(Model.attack_type == "Ranged")
+{
+    <p>Attack range: @Model.attack_range</p>
+}
+<h3>Bio</h3>
+<p>@Model.bio</p>
+<h3>Spells</h3>
+@foreach(var x in Model.spells)
+{
+    <p><a href="/base/spell/@x.id">@x.name</a></p>
+}
+@if(ViewBag.new_heroes.Count > 0)
+{
+    <h4>Heroes that use @Model.name as a base</h4>
+    @foreach(var x in ViewBag.new_heroes)
+    {
+        <p><a href="/hero/@x.id">@x.name</a></p>
+    }
+}
+<a href="/api/hero/@Model.id" style="font-size: 8pt;">View this hero as JSON data</a>

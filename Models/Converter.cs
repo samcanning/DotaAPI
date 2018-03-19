@@ -71,5 +71,18 @@ namespace DotaAPI.Models
             display.spells = spells;
             return display;
         } 
+
+        public static string DetailsString(Spell input)
+        {
+            string output = "";
+            for(int i = 0; i < input.details.Length-1; i++)
+            {
+                if(input.details[i] == '{') continue;
+                else if(input.details[i] == '_') output += ' ';
+                else if(input.details[i] == '"') continue;
+                else output += input.details[i];
+            }
+            return output;
+        }
     }
 }

@@ -41,6 +41,7 @@ namespace DotaAPI.Controllers
             Spell spell2 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_2_id);
             Spell spell3 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_3_id);
             Spell spell4 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_4_id);
+            ViewBag.base_id = heroToDisplay.hero_id;
             return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
         }
 
@@ -58,13 +59,34 @@ namespace DotaAPI.Controllers
         {
             Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
             //should create version that includes hero name
-            return Json(thisSpell);
+            return Json(Converter.Convert(thisSpell));
         }
 
         [Route("about")]
         public IActionResult About()
         {
             return View();
+        }
+
+        [Route("base/hero/{id}")]
+        public IActionResult BaseHeroPage(int id)
+        {
+            Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
+            if(thisHero == null) return RedirectToAction("Index");
+            List<Spell> spells = _context.Spells.Where(s => s.hero_id == id).ToList();
+            ViewBag.new_heroes = _context.New_Heroes.Where(n => n.hero_id == id).ToList();
+            return View(Converter.addSpells(thisHero, spells));
+        }
+
+        [Route("base/spell/{id}")]
+        public IActionResult SpellPage(int id)
+        {
+            Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
+            if(thisSpell == null) return RedirectToAction("Index");
+            ViewBag.hero = _context.Heroes.SingleOrDefault(h => h.id == thisSpell.hero_id).name;
+            ViewBag.details_string = Converter.DetailsString(thisSpell);
+            ViewBag.new_heroes = _context.New_Heroes.Where(n => n.spell_1_id == id || n.spell_2_id == id || n.spell_3_id == id || n.spell_4_id == id).ToList();
+            return View(Converter.Convert(thisSpell));
         }
 
     }

@@ -1,0 +1,28 @@
+@model DotaAPI.Models.DisplaySpell
+@{
+    ViewData["Title"] = Model.name;
+}
+<h2>@Model.name</h2>
+<h3>Hero</h3>
+<!-- <p><a href="/base/hero/@Model.hero_id">@ViewBag.hero</a></p> -->
+@if(Model.ultimate == false)
+{
+    <p><a href="/base/hero/@Model.hero_id">@ViewBag.hero</a></p>
+}
+else
+{
+    <p><a href="/base/hero/@Model.hero_id">@ViewBag.hero</a> (ultimate)</p>
+}
+<h3>Description</h3>
+<p>@Model.description</p>
+<h3>Details</h3>
+<p>@ViewBag.details_string</p>
+@if(ViewBag.new_heroes.Count != 0)
+{
+    <h3>Heroes with this spell</h3>
+    @foreach(var x in ViewBag.new_heroes)
+    {
+        <p><a href="/hero/@x.id">@x.name</a></p>
+    }
+}
+<a href="/api/spell/@Model.id" style="font-size: 8pt;">View this spell as JSON data</a>
