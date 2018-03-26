@@ -11,6 +11,7 @@ namespace DotaAPI.Models
         public string hero {get;set;}
         public int hero_id {get;set;}
         public bool ultimate {get;set;}
+        public string img {get;set;}
 
     }
 }

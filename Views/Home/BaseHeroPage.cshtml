@@ -27,7 +27,7 @@
 <h3>Spells</h3>
 @foreach(var x in Model.spells)
 {
-    <p><a href="/base/spell/@x.id">@x.name</a></p>
+    <p><img src=@x.img width=30> <a href="/base/spell/@x.id">@x.name</a></p>
 }
 @if(ViewBag.new_heroes.Count > 0)
 {

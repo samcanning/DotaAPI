@@ -14,7 +14,8 @@ namespace DotaAPI.Models
                 name = input.name,
                 description = input.description,
                 details = JObject.Parse(input.details),
-                hero_id = input.hero_id
+                hero_id = input.hero_id,
+                img = "http://cdn.dota2.com/apps/dota2/images/abilities/" + input.img + "_hp2.png"
             };
             if(input.ultimate == 1) display.ultimate = true;
             else display.ultimate = false;
@@ -35,7 +36,8 @@ namespace DotaAPI.Models
                 armor = temp.armor,
                 bio = temp.bio,
                 attack_type = temp.attack_type,
-                attack_range = temp.attack_range
+                attack_range = temp.attack_range,
+                img = "http://cdn.dota2.com/apps/dota2/images/heroes/" + temp.img + "_vert.jpg"
             };
             List<DisplaySpell> displays = new List<DisplaySpell>();
             foreach(Spell s in spells)

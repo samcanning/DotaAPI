@@ -98,6 +98,7 @@ namespace DotaAPI.Controllers
             ViewBag.hero = _context.Heroes.SingleOrDefault(h => h.id == thisSpell.hero_id).name;
             ViewBag.details_string = Converter.DetailsString(thisSpell);
             ViewBag.new_heroes = _context.New_Heroes.Where(n => n.spell_1_id == id || n.spell_2_id == id || n.spell_3_id == id || n.spell_4_id == id).ToList();
+            ViewBag.img = thisSpell.img;
             return View(Converter.Convert(thisSpell));
         }
 

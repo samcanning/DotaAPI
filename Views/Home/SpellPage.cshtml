@@ -3,6 +3,12 @@
     ViewData["Title"] = Model.name;
 }
 <h2>@Model.name</h2>
+@{
+    string img = "http://cdn.dota2.com/apps/dota2/images/abilities/";
+    img += ViewBag.img;
+    img += "_hp2.png";
+    <img src=@img>
+}
 <h3>Hero</h3>
 <!-- <p><a href="/base/hero/@Model.hero_id">@ViewBag.hero</a></p> -->
 @if(Model.ultimate == false)
