@@ -68,8 +68,9 @@ namespace DotaAPI.Controllers
         public IActionResult Spell(int id)
         {
             Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
-            //should create version that includes hero name
-            return Json(Converter.Convert(thisSpell));
+            var display = Converter.Convert(thisSpell);
+            display.hero = _context.Heroes.Single(h => h.id == thisSpell.hero_id).name;
+            return Json(display);
         }
 
         [Route("about")]

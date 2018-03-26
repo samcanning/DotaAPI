@@ -1,0 +1,16 @@
+@model DotaAPI.Models.Spell
+@{
+    ViewData["Title"] = "Add Spell";
+}
+<form asp-action="CreateSpell" asp-controller="Admin" method="post">
+    <p>name</p> <input asp-for="name"><br><br>
+    <p>description</p> <input asp-for="description"><br><br>
+    <p>details</p> <textarea asp-for="details" style="width: 80%; height: 25%;"></textarea><br><br>
+    <p>hero_id</p> <input asp-for="hero_id"><br><br>
+    <p>ultimate</p> <select asp-for="ultimate">
+        <option value='0'>no</option>
+        <option value='1'>yes</option>
+    </select><br><br>
+    <p>img</p> <input asp-for="img"><br><br>
+    <input type='submit'>
+</form>
