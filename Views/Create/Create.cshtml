@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Create a Hero";
 }
-<form asp-controller="Create" asp-action="Submit" method="POST">
+<form asp-controller="Create" enctype="multipart/form-data" asp-action="Submit" method="POST">
     <h3>Base Hero</h3>
     <select name="hero_id">
         <option value="0"></option>
@@ -45,7 +45,7 @@
             }
         }
     </select> <span asp-validation-for="spell_1_id"></span>
-    <h3>Ultimates</h3>
+    <h3>Ultimate</h3>
     <select name="spell_4_id">
         <option value='0'></option>
         @{
@@ -54,6 +54,9 @@
                 <option value="@x.id">@x.name</option>
             }
         }
-    </select> <span asp-validation-for="spell_4_id"></span><br><br>
+    </select> <span asp-validation-for="spell_4_id"></span>
+    <h3>Portrait (optional)</h3>
+    <p>If you do not upload a portrait, your hero will appear as the base hero.</p>
+    <input type="file" name="file" /><br>
     <input type="submit">
 </form>

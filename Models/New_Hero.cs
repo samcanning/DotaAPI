@@ -13,5 +13,6 @@ namespace DotaAPI.Models
         public int spell_2_id {get;set;}
         public int spell_3_id {get;set;}
         public int spell_4_id {get;set;}
+        public string img {get;set;}
     }
 }

@@ -3,3 +3,4 @@ bin/
 .vscode/
 obj/
 todolist.txt
+Credentials.cs

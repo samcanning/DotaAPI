@@ -3,6 +3,19 @@
     ViewData["Title"] = Model.name;
 }
 <h2>@Model.name</h2>
+@if(ViewBag.user_image == false)
+{
+    string img = "http://cdn.dota2.com/apps/dota2/images/heroes/";
+    img += ViewBag.img;
+    img += "_vert.jpg";
+    <img src="@img" width=20%><br><br>
+}
+else
+{
+    string img = "https://s3-us-west-2.amazonaws.com/dhcimages/";
+    img += ViewBag.img;
+    <img src="@img" width=20%><br><br>
+}
 <p>Base Hero: <a href="/base/hero/@ViewBag.base_id">@Model.base_hero</a></p>
 @if(Model.bio != null)
 {

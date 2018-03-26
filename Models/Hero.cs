@@ -14,6 +14,7 @@ namespace DotaAPI.Models
         public string bio {get;set;}
         public string attack_type {get;set;}
         public int attack_range {get;set;}
+        public string img {get;set;}
 
     }
 }

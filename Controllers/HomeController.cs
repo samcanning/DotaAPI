@@ -42,6 +42,16 @@ namespace DotaAPI.Controllers
             Spell spell3 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_3_id);
             Spell spell4 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_4_id);
             ViewBag.base_id = heroToDisplay.hero_id;
+            if(heroToDisplay.img == null)
+            {
+                ViewBag.img = baseHero.img;
+                ViewBag.user_image = false;
+            }
+            else
+            {
+                ViewBag.user_image = true;
+                ViewBag.img = heroToDisplay.img;
+            }
             return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
         }
 
@@ -75,6 +85,7 @@ namespace DotaAPI.Controllers
             if(thisHero == null) return RedirectToAction("Index");
             List<Spell> spells = _context.Spells.Where(s => s.hero_id == id).ToList();
             ViewBag.new_heroes = _context.New_Heroes.Where(n => n.hero_id == id).ToList();
+            ViewBag.img = thisHero.img;
             return View(Converter.addSpells(thisHero, spells));
         }
 

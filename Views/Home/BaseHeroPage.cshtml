@@ -3,6 +3,12 @@
     ViewData["Title"] = Model.name;
 }
 <h2>@Model.name</h2>
+@{
+    string img = "http://cdn.dota2.com/apps/dota2/images/heroes/";
+    img += ViewBag.img;
+    img += "_vert.jpg";
+    <img src="@img" width=20%>
+}
 <h3>Stats</h3>
 <p>Primary attribute: @Model.attribute</p>
 <p>Intelligence: @Model.intelligence</p>

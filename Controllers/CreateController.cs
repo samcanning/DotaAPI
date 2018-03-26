@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DotaAPI.Models;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 
 namespace DotaAPI.Controllers
 {
@@ -34,7 +37,7 @@ namespace DotaAPI.Controllers
 
         [Route("create/submit")]
         [HttpPost]
-        public IActionResult Submit(New_Hero model)
+        public IActionResult Submit(New_Hero_Creator model)
         {
             List<DisplaySpell> allSpells = new List<DisplaySpell>();
             foreach(Spell s in _context.Spells)
@@ -70,7 +73,17 @@ namespace DotaAPI.Controllers
                     spell_3_id = model.spell_3_id,
                     spell_4_id = model.spell_4_id
                 };
-                if(model.bio.Length > 0) hero.bio = model.bio;
+                if(model.bio != null) hero.bio = model.bio;
+                if(model.file != null)
+                {
+                    TransferUtility transfer = new TransferUtility(Credentials.AccessKey, Credentials.SecretKey, Amazon.RegionEndpoint.USWest2);
+                    using(var stream = new MemoryStream())
+                    {
+                        model.file.CopyTo(stream);
+                        transfer.Upload(stream, "dhcimages", model.file.FileName);
+                        hero.img = model.file.FileName;
+                    }
+                }
                 _context.Add(hero);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
