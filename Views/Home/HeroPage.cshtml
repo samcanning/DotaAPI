@@ -16,6 +16,10 @@ else
     img += ViewBag.img;
     <img src="@img" width=20%><br><br>
 }
+@if(ViewBag.username != null)
+{
+    <p>Created by <a href="/users/@ViewBag.user_id">@ViewBag.username</a></p>
+}
 <p>Base Hero: <a href="/base/hero/@ViewBag.base_id">@Model.base_hero</a></p>
 @if(Model.bio != null)
 {
@@ -26,5 +30,52 @@ else
 @foreach(var x in Model.spells)
 {
     <p><img src=@x.img width=30> <a href="/base/spell/@x.id">@x.name</a></p> 
+}
+<h3>Rating</h3>
+@if(ViewBag.rating == null)
+{
+    <p>This hero has not been rated yet!</p>
+}
+else
+{
+    string vote = "vote";
+    if(@ViewBag.voteCount > 1)
+    {
+        vote += 's';
+    }
+    <p>@ViewBag.rating (@ViewBag.voteCount @vote)</p>
+}
+@if(ViewBag.loggedUser == null)
+{
+    <p><a href="/login">Log in</a> to rate this hero.</p>
+}
+else
+{
+    <form asp-controller="Home" asp-action="VoteUp" method="post">
+        <input hidden name="id" value="@Model.id">
+        <input hidden name="user" value="@ViewBag.loggedUser">
+        <input type="submit" value="👍">
+    </form>
+    <form asp-controller="Home" asp-action="VoteDown" method="post">
+        <input hidden name="id" value="@Model.id">
+        <input hidden name="user" value="@ViewBag.loggedUser">
+        <input type="submit" value="👎">
+    </form>
+}
+@if(ViewBag.position == "middle")
+{
+    int prev = Model.id - 1;
+    int next = Model.id + 1;
+    <p><a href="@prev">← Previous Hero</a> | <a href="@next">Next Hero →</a></p>
+}
+else if(ViewBag.position == "first")
+{
+    int next = Model.id + 1;
+    <p><a href="@next">Next Hero →</a></p>
+}
+else
+{
+    int prev = Model.id - 1;
+    <p><a href="@prev">← Previous Hero</a></p>
 }
 <p><a href="list">Back</a></p>

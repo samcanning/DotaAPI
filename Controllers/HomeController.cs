@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DotaAPI.Models;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace DotaAPI.Controllers
 {
@@ -22,6 +23,7 @@ namespace DotaAPI.Controllers
         [Route("")]
         public IActionResult Index()
         {
+            ViewBag.name = HttpContext.Session.GetString("username");
             return View();
         }
 
@@ -52,6 +54,31 @@ namespace DotaAPI.Controllers
                 ViewBag.user_image = true;
                 ViewBag.img = heroToDisplay.img;
             }
+            if(heroToDisplay.user_id != null)
+            {
+                User creator = _context.Users.SingleOrDefault(u => u.id == heroToDisplay.user_id);
+                ViewBag.username = creator.username;
+                ViewBag.user_id = creator.id;
+            }
+            ViewBag.loggedUser = HttpContext.Session.GetString("username");
+            decimal rating = 0;
+            List<Vote> votes = _context.Votes.Where(v => v.new_hero_id == id).ToList();
+            if(votes.Count == 0)
+            {
+                ViewBag.rating = null;
+            }
+            else
+            {
+                foreach(Vote v in votes)
+                {
+                    rating += v.value;
+                }
+                ViewBag.rating = rating / votes.Count;
+                ViewBag.voteCount = votes.Count;
+            }
+            if(heroToDisplay == _context.New_Heroes.Last()) ViewBag.position = "last";
+            else if(heroToDisplay == _context.New_Heroes.First()) ViewBag.position = "first";
+            else ViewBag.position = "middle";
             return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
         }
 
@@ -87,6 +114,9 @@ namespace DotaAPI.Controllers
             List<Spell> spells = _context.Spells.Where(s => s.hero_id == id).ToList();
             ViewBag.new_heroes = _context.New_Heroes.Where(n => n.hero_id == id).ToList();
             ViewBag.img = thisHero.img;
+            if(thisHero == _context.Heroes.Last()) ViewBag.position = "last";
+            else if(thisHero == _context.Heroes.First()) ViewBag.position = "first";
+            else ViewBag.position = "middle";
             return View(Converter.addSpells(thisHero, spells));
         }
 
@@ -100,6 +130,54 @@ namespace DotaAPI.Controllers
             ViewBag.new_heroes = _context.New_Heroes.Where(n => n.spell_1_id == id || n.spell_2_id == id || n.spell_3_id == id || n.spell_4_id == id).ToList();
             ViewBag.img = thisSpell.img;
             return View(Converter.Convert(thisSpell));
+        }
+
+        [HttpPost]
+        public IActionResult VoteUp(int id, string user)
+        {
+            User thisUser = _context.Users.Single(u => u.username == user);
+            Vote existingVote = _context.Votes.SingleOrDefault(v => v.new_hero_id == id && v.user_id == thisUser.id);
+            if(existingVote == null)
+            {
+                Vote newVote = new Vote()
+                {
+                   new_hero_id = id,
+                   user_id = thisUser.id,
+                   value = 1 
+                };
+                _context.Add(newVote);
+            }
+            else
+            {
+                existingVote.value = 1;
+                _context.Update(existingVote);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("HeroPage", new { id = id });
+        }
+
+        [HttpPost]
+        public IActionResult VoteDown(int id, string user)
+        {
+            User thisUser = _context.Users.Single(u => u.username == user);
+            Vote existingVote = _context.Votes.SingleOrDefault(v => v.new_hero_id == id && v.user_id == thisUser.id);
+            if(existingVote == null)
+            {
+                Vote newVote = new Vote()
+                {
+                   new_hero_id = id,
+                   user_id = thisUser.id,
+                   value = 0
+                };
+                _context.Add(newVote);
+            }
+            else
+            {
+                existingVote.value = 0;
+                _context.Update(existingVote);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("HeroPage", new { id = id });
         }
 
     }

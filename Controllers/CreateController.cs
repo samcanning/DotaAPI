@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using Amazon.S3;
 using Amazon.S3.Transfer;
+using Microsoft.AspNetCore.Http;
 
 namespace DotaAPI.Controllers
 {
@@ -84,15 +85,21 @@ namespace DotaAPI.Controllers
                     spell_3_id = model.spell_3_id,
                     spell_4_id = model.spell_4_id
                 };
+                if(HttpContext.Session.GetString("username") != null)
+                {
+                    hero.user_id = _context.Users.SingleOrDefault(u => u.username == HttpContext.Session.GetString("username")).id;
+                }
                 if(model.bio != null) hero.bio = model.bio;
                 if(model.file != null)
                 {
                     TransferUtility transfer = new TransferUtility(Credentials.AccessKey, Credentials.SecretKey, Amazon.RegionEndpoint.USWest2);
                     using(var stream = new MemoryStream())
                     {
+                        string key = null;
+                        while(_context.New_Heroes.FirstOrDefault(n => n.img == key) != null) key = GenerateKey();
                         model.file.CopyTo(stream);
-                        transfer.Upload(stream, "dhcimages", model.file.FileName);
-                        hero.img = model.file.FileName;
+                        transfer.Upload(stream, "dhcimages", key);
+                        hero.img = key;
                     }
                 }
                 _context.Add(hero);
@@ -102,6 +109,18 @@ namespace DotaAPI.Controllers
             }
             ViewBag.bio = model.bio;
             return View("Create");
+        }
+
+        public string GenerateKey()
+        {
+            Random random = new Random();
+            string chars = "qwertyuiopasdfghjklzxcvbnm1234567890";
+            string key = "";
+            for(int i = 0; i < 16; i++)
+            {
+                key += chars[random.Next(chars.Length)];
+            }
+            return key;
         }
     }
 }

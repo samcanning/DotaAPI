@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<h3>Welcome to the Dota 2 hero creator!</h3>
+@if(ViewBag.name == null)
+{
+    <h3>Welcome to the Dota 2 hero creator!</h3>
+}
+else
+{
+    <h3>Welcome to the Dota 2 hero creator, @ViewBag.name!</h3>
+}
 <p><a href="create">Create a hero</a></p>
 <p><a href="list">View heroes</a></p>
 <p>You can also use the API! <a href="http://localhost:5000/api/hero/1">http://localhost:5000/api/hero/(number)</a> for heroes, <a href="http://localhost:5000/api/spell/1">http://localhost:5000/api/spell/(number)</a> for spells</p>

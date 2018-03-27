@@ -37,4 +37,20 @@
         <p><a href="/hero/@x.id">@x.name</a></p>
     }
 }
+@if(ViewBag.position == "middle")
+{
+    int prev = Model.id - 1;
+    int next = Model.id + 1;
+    <p><a href="@prev">← Previous Hero</a> | <a href="@next">Next Hero →</a></p>
+}
+else if(ViewBag.position == "first")
+{
+    int next = Model.id + 1;
+    <p><a href="@next">Next Hero →</a></p>
+}
+else
+{
+    int prev = Model.id - 1;
+    <p><a href="@prev">← Previous Hero</a></p>
+}
 <a href="/api/hero/@Model.id" style="font-size: 8pt;">View this hero as JSON data</a>
