@@ -27,10 +27,51 @@ namespace DotaAPI.Controllers
             return View();
         }
 
-        [Route("list")]
+        [Route("heroes")]
         public IActionResult List()
         {
-            return View(_context.New_Heroes.ToList());
+            return RedirectToAction("ListPage", new {sort = "recent"});
+        }
+
+        // [Route("heroes/{sort}")]
+        // public IActionResult SortedList(string sort)
+        // {
+        //     List<New_Hero> heroes = new List<New_Hero>();
+        //     if(sort == "recent")
+        //     {
+        //         heroes = _context.New_Heroes.OrderByDescending(h => h.id).ToList();
+        //     }
+        //     if(sort == "top")
+        //     {
+        //         heroes = _context.New_Heroes.OrderByDescending(h => h.rating).ToList();
+        //     }
+        //     return View("List", heroes);
+        // }
+
+        [Route("heroes/{sort}")]
+        public IActionResult ListPage(string sort, int page = 1)
+        {
+            List<New_Hero> heroes = new List<New_Hero>();
+            if(sort == "recent")
+            {
+                heroes = _context.New_Heroes.OrderByDescending(h => h.id).ToList();
+            }
+            if(sort == "top")
+            {
+                heroes = _context.New_Heroes.OrderByDescending(h => h.rating).ToList();
+            }
+            List<New_Hero> heroesList = new List<New_Hero>();
+            int perPage = 10;
+            int offset = (page - 1) * perPage;
+            if(offset >= heroes.Count || offset < 0) offset = 0;
+            for(int i = 0; i < perPage && (i + offset) < heroes.Count; i++)
+            {
+                heroesList.Add(heroes[i + offset]);
+            }
+            ViewBag.page = page;
+            ViewBag.sort = sort;
+            ViewBag.totalPages = (int)Math.Ceiling((decimal)_context.New_Heroes.Count() / perPage);
+            return View("List", heroesList);
         }
 
         [Route("hero/{id}")]
@@ -73,7 +114,7 @@ namespace DotaAPI.Controllers
                 {
                     rating += v.value;
                 }
-                ViewBag.rating = rating / votes.Count;
+                ViewBag.rating = heroToDisplay.rating;
                 ViewBag.voteCount = votes.Count;
             }
             if(heroToDisplay == _context.New_Heroes.Last()) ViewBag.position = "last";
@@ -137,6 +178,7 @@ namespace DotaAPI.Controllers
         {
             User thisUser = _context.Users.Single(u => u.username == user);
             Vote existingVote = _context.Votes.SingleOrDefault(v => v.new_hero_id == id && v.user_id == thisUser.id);
+            New_Hero thisHero = _context.New_Heroes.SingleOrDefault(n => n.id == id);
             if(existingVote == null)
             {
                 Vote newVote = new Vote()
@@ -145,11 +187,21 @@ namespace DotaAPI.Controllers
                    user_id = thisUser.id,
                    value = 1 
                 };
+                if(thisHero.rating == null) thisHero.rating = (decimal)100.00;
+                else
+                {
+                    int numberOfVotes = _context.Votes.Where(v => v.new_hero_id == id).Count();
+                    thisHero.rating = (thisHero.rating * numberOfVotes + 100) / (numberOfVotes + 1);
+                }
+                _context.Update(thisHero);
                 _context.Add(newVote);
             }
             else
             {
                 existingVote.value = 1;
+                int numberOfVotes = _context.Votes.Where(v => v.new_hero_id == id).Count();
+                thisHero.rating = (thisHero.rating * numberOfVotes + 100) / numberOfVotes;
+                _context.Update(thisHero);
                 _context.Update(existingVote);
             }
             _context.SaveChanges();
@@ -161,6 +213,7 @@ namespace DotaAPI.Controllers
         {
             User thisUser = _context.Users.Single(u => u.username == user);
             Vote existingVote = _context.Votes.SingleOrDefault(v => v.new_hero_id == id && v.user_id == thisUser.id);
+            New_Hero thisHero = _context.New_Heroes.SingleOrDefault(n => n.id == id);
             if(existingVote == null)
             {
                 Vote newVote = new Vote()
@@ -169,11 +222,21 @@ namespace DotaAPI.Controllers
                    user_id = thisUser.id,
                    value = 0
                 };
+                if(thisHero.rating == null) thisHero.rating = (decimal)100.00;
+                else
+                {
+                    int numberOfVotes = _context.Votes.Where(v => v.new_hero_id == id).Count();
+                    thisHero.rating = (thisHero.rating * numberOfVotes) / (numberOfVotes + 1);
+                }
+                _context.Update(thisHero);
                 _context.Add(newVote);
             }
             else
             {
                 existingVote.value = 0;
+                int numberOfVotes = _context.Votes.Where(v => v.new_hero_id == id).Count();
+                thisHero.rating = (thisHero.rating * numberOfVotes - 100) / numberOfVotes;
+                _context.Update(thisHero);
                 _context.Update(existingVote);
             }
             _context.SaveChanges();

@@ -102,5 +102,19 @@ namespace DotaAPI.Controllers
             _context.SaveChanges();
             return RedirectToAction("AddSpell");
         }
+
+        [Route("admin/updatehero")]
+        public IActionResult UpdateHero()
+        {
+            if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            return View();
+        }
+
+        [Route("admin/updatespell")]
+        public IActionResult UpdateSpell()
+        {
+            if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            return View();
+        }
     }
 }

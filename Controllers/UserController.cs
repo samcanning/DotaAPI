@@ -17,9 +17,11 @@ namespace DotaAPI.Controllers
         [Route("register")]
         public IActionResult Register()
         {
+            if(HttpContext.Session.GetString("username") != null) return RedirectToAction("Index", "Home");
             return View();
         }
 
+        [HttpPost]
         [Route("register/submit")]
         public IActionResult RegisterSubmit(UserValidator model)
         {
@@ -41,9 +43,11 @@ namespace DotaAPI.Controllers
         [Route("login")]
         public IActionResult Login()
         {
+            if(HttpContext.Session.GetString("username") != null) return RedirectToAction("Index", "Home");
             return View();
         }
 
+        [HttpPost]
         [Route("login/submit")]
         public IActionResult LoginSubmit(LoginValidator model)
         {
@@ -61,6 +65,13 @@ namespace DotaAPI.Controllers
                 return View("Login");
             }
             HttpContext.Session.SetString("username", thisUser.username);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Route("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
     }

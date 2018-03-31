@@ -15,5 +15,6 @@ namespace DotaAPI.Models
         public int spell_4_id {get;set;}
         public string img {get;set;}
         public int? user_id {get; set;}
+        public decimal? rating {get;set;}
     }
 }

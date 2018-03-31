@@ -5,5 +5,176 @@
 <h2>Created Heroes</h2>
 @foreach(var x in Model)
 {
-    <p><a href="hero/@x.id">@x.name</a></p>
+    <p><a href="/hero/@x.id">@x.name</a></p>
+}
+@if(ViewBag.page == 1)
+{
+    if(ViewBag.totalPages == 1)
+    {
+        <span><b>1</b></span>
+    }
+    else if(ViewBag.totalPages > 9)
+    {
+        <span><b>1</b></span>
+        for(int i = 2; i < 10; i++)
+        {
+            <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+        }
+        <span>...</span>
+        <span><a href="/heroes/@ViewBag.sort?page=2">Next &rsaquo;</a></span>
+        <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+    }
+    else
+    {
+        for(int i = 1; i <= ViewBag.totalPages; i++)
+        {
+            if(i == ViewBag.page)
+            {
+                <b>@i</b>
+            }
+            else
+            {
+                <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+            }        
+        }
+        <span><a href="/heroes/@ViewBag.sort?page=2">Next &rsaquo;</a></span>
+        <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+    }
+}
+@if(ViewBag.page != 1)
+{
+    int prev = ViewBag.page - 1;
+    int next = ViewBag.page + 1;
+    if(ViewBag.totalPages > 9)
+    {
+        int fromStart = ViewBag.page - 1;
+        int fromEnd = (int)ViewBag.totalPages - ViewBag.page;
+        if(fromStart > 3 && fromEnd > 3)
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            @if(fromStart != 4)
+            {
+                <span>...</span>
+            }
+            @for(int i = ViewBag.page - 4; i <= ViewBag.page + 4; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }
+            }
+            @if(fromEnd != 4)
+            {
+                <span>...</span>
+            }
+            <span><a href="/heroes/@ViewBag.sort?page=@next">Next &rsaquo;</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+        }
+        if(fromStart > 3 && fromEnd <= 3 && fromEnd != 0)
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            <span>...</span>
+            @for(int i = ((int)ViewBag.totalPages - 8); i <= (int)ViewBag.totalPages; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }
+            }
+            <span><a href="/heroes/@ViewBag.sort?page=@next">Next &rsaquo;</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+        }
+        if(fromStart <= 3 && fromEnd > 3)
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            @for(int i = 1; i <= 9; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }
+            }
+            <span>...</span>
+            <span><a href="/heroes/@ViewBag.sort?page=@next">Next &rsaquo;</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+        }
+        if(fromEnd == 0)
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            <span>...</span>
+            @for(int i = ((int)ViewBag.totalPages - 8); i <= (int)ViewBag.totalPages; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }
+            }
+        }
+    }
+    else
+    {
+        if(ViewBag.page == ViewBag.totalPages - 1)
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            for(int i = 1; i <= ViewBag.totalPages; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }        
+            }
+            <span><a href="/heroes/@ViewBag.sort?page=@next">Next &rsaquo;</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@ViewBag.totalPages">Last &raquo;</a></span>
+        }
+        else
+        {
+            <span><a href="/heroes/@ViewBag.sort">&laquo; First</a></span>
+            <span><a href="/heroes/@ViewBag.sort?page=@prev">&lsaquo; Prev</a></span>
+            for(int i = 1; i <= ViewBag.totalPages; i++)
+            {
+                if(i == ViewBag.page)
+                {
+                    <b>@i</b>
+                }
+                else
+                {
+                    <span><a href="/heroes/@ViewBag.sort?page=@i">@i</a></span>
+                }        
+            }
+        }
+    }
+}
+<br><br>
+@if(ViewBag.sort == "recent")
+{
+    <p><a href="/heroes/top?page=@ViewBag.page">Sort by rating</a></p>
+}
+else
+{
+    <p><a href="/heroes/recent?page=@ViewBag.page">Sort by most recent</a></p>
 }
