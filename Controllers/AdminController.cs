@@ -22,6 +22,7 @@ namespace DotaAPI.Controllers
         [Route("admin")]
         public IActionResult Index()
         {
+            if(HttpContext.Session.GetString("admin") == "true") return RedirectToAction("Main");
             return View();
         }
 
@@ -104,17 +105,138 @@ namespace DotaAPI.Controllers
         }
 
         [Route("admin/updatehero")]
-        public IActionResult UpdateHero()
+        public IActionResult UpdateHeroList()
         {
             if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
-            return View();
+            return View(_context.Heroes.ToList());
+        }
+        public IActionResult SelectHero(int id)
+        {
+            return RedirectToAction("UpdateHero", new {id = id});
+        }
+
+        [Route("admin/updatehero/{id}")]
+        public IActionResult UpdateHero(int id)
+        {
+            if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            return View(_context.Heroes.SingleOrDefault(h => h.id == id));
+        }
+
+        [HttpPost]
+        public IActionResult SubmitHeroChanges(Hero model)
+        {
+            Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == model.id);
+            thisHero.name = model.name;
+            thisHero.attribute = model.attribute;
+            thisHero.intelligence = model.intelligence;
+            thisHero.agility = model.agility;
+            thisHero.strength = model.strength;
+            thisHero.attack = model.attack;
+            thisHero.speed = model.speed;
+            thisHero.armor = model.armor;
+            thisHero.bio = model.bio;
+            thisHero.attack_type = model.attack_type;
+            thisHero.attack_range = model.attack_range;
+            thisHero.img = model.img;
+            _context.Update(thisHero);
+            _context.SaveChanges();
+            return RedirectToAction("UpdateHero", new {id = model.id});
         }
 
         [Route("admin/updatespell")]
-        public IActionResult UpdateSpell()
+        public IActionResult UpdateSpellList()
         {
             if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            return View(_context.Spells.ToList());
+        }
+
+        public IActionResult SelectSpell(int id)
+        {
+            return RedirectToAction("UpdateSpell", new {id = id});
+        }
+
+        [Route("admin/updatespell/{id}")]
+        public IActionResult UpdateSpell(int id)
+        {
+            if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            return View(_context.Spells.SingleOrDefault(s => s.id == id));
+        }
+
+        [HttpPost]
+        public IActionResult SubmitSpellChanges(Spell model)
+        {
+            Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == model.id);
+            thisSpell.name = model.name;
+            thisSpell.description = model.description;
+            thisSpell.details = model.details;
+            thisSpell.hero_id = model.hero_id;
+            thisSpell.ultimate = model.ultimate;
+            thisSpell.img = model.img;
+            _context.Update(thisSpell);
+            _context.SaveChanges();
+            return RedirectToAction("UpdateSpell", new {id = model.id});
+        }
+
+        [Route("admin/delete/{type}")]
+        public IActionResult DeleteList(string type)
+        {
+            if(HttpContext.Session.GetString("admin") != "true") return RedirectToAction("Index");
+            if(type == "hero")
+            {
+                ViewBag.type = "Hero";
+                ViewBag.list = _context.Heroes.ToList();
+                return View();
+            }
+            if(type == "spell")
+            {
+                ViewBag.type = "Spell";
+                ViewBag.list = _context.Spells.ToList();
+                return View();
+            }
+            return View("Main");
+        }
+
+        [HttpPost]
+        [Route("admin/delete/confirm")]
+        public IActionResult SelectDelete(string type, int id, string username, string password)
+        {
+            PasswordHasher<User> hasher = new PasswordHasher<User>();
+            User thisUser = _context.Users.SingleOrDefault(u => u.username == username);
+            if(thisUser == null) return RedirectToAction("Main");
+            if(hasher.VerifyHashedPassword(thisUser, thisUser.password, password) == 0) return RedirectToAction("Main");
+            type = type.ToLower();
+            ViewBag.type = type;
+            ViewBag.id = id;
+            if(type == "hero")
+            {
+                ViewBag.name = _context.Heroes.Single(h => h.id == id).name;
+            }
+            if(type == "spell")
+            {
+                ViewBag.name = _context.Spells.Single(s => s.id == id).name;
+            }
             return View();
         }
+
+        [HttpPost]
+        public IActionResult ConfirmDelete(string type, int id, string yesButton, string noButton)
+        {
+            if(yesButton == "Yes")
+            {
+                if(type == "hero")
+                {
+                    Hero toDelete = _context.Heroes.Single(h => h.id == id);
+                    _context.Remove(toDelete);
+                }
+                if(type == "spell")
+                {
+                    Spell toDelete = _context.Spells.Single(s => s.id == id);
+                    _context.Remove(toDelete);
+                }
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Main");
+        }
+        
     }
 }

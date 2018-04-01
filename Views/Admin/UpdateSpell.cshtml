@@ -1,1 +1,16 @@
-<p>update spell</p>
+@model DotaAPI.Models.Spell
+@{
+    ViewData["Title"] = "Update " + @Model.name;
+}
+<h3>Update @Model.name</h3>
+<form asp-action="SubmitSpellChanges" asp-action="Admin" method="POST">
+    <input hidden asp-for="id">
+    Name <input asp-for="name"><br><br>
+    Description <input asp-for="description"><br><br>
+    Details <input asp-for="details"><br><br>
+    Hero ID <input asp-for="hero_id"><br><br>
+    Ultimate (0 for no, 1 for yes) <input asp-for="ultimate"><br><br>
+    Img <input asp-for="img"><br><br>
+    <input type='submit'><br><br>
+</form>
+<p><a href="/admin/updatespell">Back</a></p>

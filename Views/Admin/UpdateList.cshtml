@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Update " + @ViewBag.type;
+}
+<h3>Update @ViewBag.type</h3>
+<form asp-action="SelectUpdate" asp-controller="Admin">
+    <select name="id">
+        @foreach(var x in ViewBag.list)
+        {
+            <option value="@x.id">@x.name</option>
+        }
+    </select>
+    <input type='submit'>
+</form>
+<p><a href="/admin/main">Back</a></p>

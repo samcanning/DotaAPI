@@ -1,1 +1,22 @@
-<p>update hero</p>
+@model DotaAPI.Models.Hero
+@{
+    ViewData["Title"] = "Update " + @Model.name;
+}
+<h3>Update @Model.name</h3>
+<form asp-action="SubmitHeroChanges" asp-action="Admin" method="POST">
+    <input hidden asp-for="id">
+    Name <input asp-for="name"><br><br>
+    Attribute <input asp-for="attribute"><br><br>
+    Int <input asp-for="intelligence"><br><br>
+    Agi <input asp-for="agility"><br><br>
+    Str <input asp-for="strength"><br><br>
+    Atk <input asp-for="attack"><br><br>
+    Spd <input asp-for="speed"><br><br>
+    Armor <input asp-for="armor"><br><br>
+    Bio <input asp-for="bio"><br><br>
+    Atk type <input asp-for="attack_type"><br><br>
+    Range <input asp-for="attack_range"><br><br>
+    Img <input asp-for="img"><br><br>
+    <input type='submit'><br><br>
+</form>
+<p><a href="/admin/updatehero">Back</a></p>

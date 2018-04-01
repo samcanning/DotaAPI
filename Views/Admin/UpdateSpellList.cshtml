@@ -1,0 +1,15 @@
+@model List<DotaAPI.Models.Spell>
+@{
+    ViewData["Title"] = "Update Spell";
+}
+<h3>Update Spell</h3>
+<form asp-action="SelectSpell" asp-controller="Admin">
+    <select name="id">
+        @foreach(var h in Model)
+        {
+            <option value="@h.id">@h.name</option>
+        }
+    </select>
+    <input type='submit'>
+</form>
+<p><a href="/admin/main">Back</a></p>

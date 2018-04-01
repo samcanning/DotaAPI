@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Confirm Deletion";
+}
+<h3>Confirm Deletion</h3>
+<p>Are you sure you want to delete @ViewBag.name?</p>
+<form asp-action="ConfirmDelete" asp-controller="Admin" method="POST">
+    <input hidden name="type" value="@ViewBag.type">
+    <input hidden name="id" value="@ViewBag.id">
+    <input type="submit" name="yesButton" value="Yes"> <input type="submit" name="noButton" value="No">
+</form>

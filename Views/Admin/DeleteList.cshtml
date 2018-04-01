@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Delete " + @ViewBag.type;
+}
+<h3>Delete @ViewBag.type</h3>
+<form asp-action="SelectDelete" asp-controller="Admin" method="POST">
+    <input hidden name="type" value="@ViewBag.type">
+    <select name="id">
+        @foreach(var x in ViewBag.list)
+        {
+            <option value="@x.id">@x.name</option>
+        }
+    </select><br><br>
+    Confirm username <input type="username" name="username"><br><br>
+    Confirm password <input type="password" name="password"><br><br>
+    <input type='submit'><br><br>
+</form>
+<p><a href="/admin/main">Back</a></p>
