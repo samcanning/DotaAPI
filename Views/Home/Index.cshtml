@@ -1,17 +1,22 @@
-﻿@{
+﻿@model List<DotaAPI.Models.New_Hero>
+@{
     ViewData["Title"] = "Home Page";
 }
 @if(ViewBag.name == null)
 {
-    <h3>Welcome to the Dota 2 hero creator!</h3>
+    <h3>Welcome to DotaCreator!</h3>
 }
 else
 {
     <h3>Welcome, @ViewBag.name!</h3>
 }
-<p>The Dota 2 Hero Creator is based on the Ability Draft mode in Dota 2. Starting with an existing hero as the base, mix and match other heroes' spells to create a new hero.</p>
 <p><a href="create">Create a hero</a> now, or <a href="heroes">view other users' heroes.</a></p>
-<p>You can also use the API! <a href="http://localhost:5000/api/hero/1">http://localhost:5000/api/hero/(number)</a> for heroes, <a href="http://localhost:5000/api/spell/1">http://localhost:5000/api/spell/(number)</a> for spells</p>
+<h4>Newest heroes</h4>
+@foreach(var x in Model)
+{
+    <p><a href='/hero/@x.id'>@x.name</a></p>
+}
+<hr>
 @if(ViewBag.name == null)
 {
     <p><a href='login'>Log in</a> or <a href='register'>create an account</a> to keep track of your created heroes and vote on other heroes!</p>

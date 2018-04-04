@@ -3,6 +3,14 @@
     ViewData["Title"] = "View Heroes";
 }
 <h2>Created Heroes</h2>
+@if(ViewBag.sort == "recent")
+{
+    <h4>Most recent</h4>
+}
+else
+{
+    <h4>Top rated</h4>
+}
 @foreach(var x in Model)
 {
     <p><a href="/hero/@x.id">@x.name</a></p>

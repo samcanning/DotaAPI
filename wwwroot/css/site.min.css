@@ -1,1 +1,41 @@
-body{padding-top:50px;padding-bottom:20px}.body-content{padding-left:15px;padding-right:15px}.carousel-caption p{font-size:20px;line-height:1.4}.carousel-inner .item img[src$=".svg"]{width:100%}#qrCode{margin:15px}@media screen and (max-width:767px){.carousel-caption{display:none}}
+body{padding-top:50px;padding-bottom:20px;background-color: rgb(35, 36, 37)}.body-content{padding-left:15px;padding-right:15px}.carousel-caption p{font-size:20px;line-height:1.4}.carousel-inner .item img[src$=".svg"]{width:100%}#qrCode{margin:15px}@media screen and (max-width:767px){.carousel-caption{display:none}}
+
+h2, h3, h4, p, span, form
+{
+    color: rgb(150,150,150);
+}
+
+input, select
+{
+    color: black;
+}
+
+a
+{
+    color: rgb(180,180,200);
+    /* font-weight: bold;  */
+}
+
+.voteButton
+{
+    display: inline-block;
+    margin-bottom: 5pt;
+}
+
+.navbar
+{
+    background-color: rgb(23,24,25);
+}
+
+
+.form-control
+{
+    width: 180px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+b
+{
+    color: white;
+}

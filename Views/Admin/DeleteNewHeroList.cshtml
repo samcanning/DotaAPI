@@ -1,0 +1,17 @@
+@model List<DotaAPI.Models.New_Hero>
+@{
+    ViewData["Title"] = "Delete New Hero";
+}
+<h3>Delete New Hero</h3>
+<form asp-action="DeleteNew" asp-controller="Admin" method="POST">
+    <select name="id">
+        @foreach(var x in Model)
+        {
+            <option value="@x.id">@x.name (ID @x.id)</option>
+        }
+    </select><br><br>
+    Confirm username <input type="username" name="username"><br><br>
+    Confirm password <input type="password" name="password"><br><br>
+    <input type='submit'><br><br>
+</form>
+<p><a href="/admin/main">Back</a></p>

@@ -51,31 +51,15 @@ else
 }
 else
 {
-    <form asp-controller="Home" asp-action="VoteUp" method="post">
+    <form class="voteButton" asp-controller="Home" asp-action="VoteUp" method="post">
         <input hidden name="id" value="@Model.id">
         <input hidden name="user" value="@ViewBag.loggedUser">
         <input type="submit" value="👍">
     </form>
-    <form asp-controller="Home" asp-action="VoteDown" method="post">
+    <form class="voteButton" asp-controller="Home" asp-action="VoteDown" method="post">
         <input hidden name="id" value="@Model.id">
         <input hidden name="user" value="@ViewBag.loggedUser">
         <input type="submit" value="👎">
     </form>
-}
-@if(ViewBag.position == "middle")
-{
-    int prev = Model.id - 1;
-    int next = Model.id + 1;
-    <p><a href="@prev">← Previous Hero</a> | <a href="@next">Next Hero →</a></p>
-}
-else if(ViewBag.position == "first")
-{
-    int next = Model.id + 1;
-    <p><a href="@next">Next Hero →</a></p>
-}
-else
-{
-    int prev = Model.id - 1;
-    <p><a href="@prev">← Previous Hero</a></p>
 }
 <p><a href="/heroes">Back</a></p>

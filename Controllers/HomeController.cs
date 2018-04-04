@@ -24,7 +24,13 @@ namespace DotaAPI.Controllers
         public IActionResult Index()
         {
             ViewBag.name = HttpContext.Session.GetString("username");
-            return View();
+            List<New_Hero> newest = _context.New_Heroes.OrderByDescending(n => n.id).ToList();
+            List<New_Hero> fiveNewest = new List<New_Hero>();
+            for(int i = 0; i < 5 && i < newest.Count; i++)
+            {
+                fiveNewest.Add(newest[i]);
+            }
+            return View(fiveNewest);
         }
 
         [Route("heroes")]
@@ -32,21 +38,6 @@ namespace DotaAPI.Controllers
         {
             return RedirectToAction("ListPage", new {sort = "recent"});
         }
-
-        // [Route("heroes/{sort}")]
-        // public IActionResult SortedList(string sort)
-        // {
-        //     List<New_Hero> heroes = new List<New_Hero>();
-        //     if(sort == "recent")
-        //     {
-        //         heroes = _context.New_Heroes.OrderByDescending(h => h.id).ToList();
-        //     }
-        //     if(sort == "top")
-        //     {
-        //         heroes = _context.New_Heroes.OrderByDescending(h => h.rating).ToList();
-        //     }
-        //     return View("List", heroes);
-        // }
 
         [Route("heroes/{sort}")]
         public IActionResult ListPage(string sort, int page = 1)
@@ -78,7 +69,7 @@ namespace DotaAPI.Controllers
         public IActionResult HeroPage(int id)
         {
             New_Hero heroToDisplay = _context.New_Heroes.SingleOrDefault(h => h.id == id);
-            if(heroToDisplay == null) return RedirectToAction("List");
+            if(heroToDisplay == null) return View("HeroNotFound");
             Hero baseHero = _context.Heroes.SingleOrDefault(h => h.id == heroToDisplay.hero_id);
             Spell spell1 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_1_id);
             Spell spell2 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_2_id);
@@ -117,9 +108,11 @@ namespace DotaAPI.Controllers
                 ViewBag.rating = heroToDisplay.rating;
                 ViewBag.voteCount = votes.Count;
             }
+            /* may want to add this again later - should add "previous/next hero" links to each hero page, but links to a dead page if a hero is deleted
             if(heroToDisplay == _context.New_Heroes.Last()) ViewBag.position = "last";
             else if(heroToDisplay == _context.New_Heroes.First()) ViewBag.position = "first";
             else ViewBag.position = "middle";
+            */
             return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
         }
 
@@ -128,7 +121,6 @@ namespace DotaAPI.Controllers
         {
             Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
             HeroWithSpells result = Converter.addSpells(thisHero, _context.Spells.Where(s => s.hero_id == id).ToList());
-            // HeroWithSpells result = addSpells(thisHero, _context.Spells.Where(s => s.hero_id == id).ToList());
             return Json(result);
         }
 
@@ -222,7 +214,7 @@ namespace DotaAPI.Controllers
                    user_id = thisUser.id,
                    value = 0
                 };
-                if(thisHero.rating == null) thisHero.rating = (decimal)100.00;
+                if(thisHero.rating == null) thisHero.rating = (decimal)0.00;
                 else
                 {
                     int numberOfVotes = _context.Votes.Where(v => v.new_hero_id == id).Count();

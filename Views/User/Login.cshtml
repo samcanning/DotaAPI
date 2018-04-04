@@ -4,7 +4,7 @@
 }
 <h2>Login</h2>
 <form asp-controller="User" asp-action="LoginSubmit" method="POST">
-    Username: <input asp-for="username"> <span asp-validation-for="username"></span><br><br>
-    Password: <input asp-for="password"> <span asp-validation-for="password"></span><br><br>
+    Username <br><input class='form-control' asp-for="username"> <span asp-validation-for="username"></span><br><br>
+    Password <br><input class='form-control' asp-for="password"> <span asp-validation-for="password"></span><br><br>
     <input type='submit'>
 </form>

@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "Create a Hero";
 }
-<form asp-controller="Create" enctype="multipart/form-data" asp-action="Submit" method="POST">
+<form asp-controller="Create" role="form" enctype="multipart/form-data" asp-action="Submit" method="POST">
     <h3>Base Hero</h3>
-    <select name="hero_id">
+    <select class='form-control' name="hero_id">
         <option value="0"></option>
         @{
             foreach(var x in ViewBag.heroes)
@@ -14,11 +14,11 @@
         }
     </select> <span asp-validation-for="hero_id"></span>
     <h3>Name</h3>
-    <input type="text" name="name"> <span asp-validation-for="name"></span>
+    <input class='form-control' type="text" name="name"> <span asp-validation-for="name"></span>
     <h3>Biography <span style="font-size: 10pt">(optional)</span></h3> 
-    <textarea name="bio">@ViewBag.bio</textarea> <span asp-validation-for="bio"></span>
+    <textarea class='form-control' name="bio">@ViewBag.bio</textarea> <span asp-validation-for="bio"></span>
     <h3>Regular spells</h3>
-    <select name="spell_1_id">
+    <select class='form-control' name="spell_1_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -27,7 +27,7 @@
             }
         }
     </select>
-    <select name="spell_2_id">
+    <select class='form-control' name="spell_2_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -36,7 +36,7 @@
             }
         }
     </select>
-    <select name="spell_3_id">
+    <select class='form-control' name="spell_3_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.regulars)
@@ -46,7 +46,7 @@
         }
     </select> <span asp-validation-for="spell_1_id"></span>
     <h3>Ultimate</h3>
-    <select name="spell_4_id">
+    <select class='form-control' name="spell_4_id">
         <option value='0'></option>
         @{
             foreach(var x in ViewBag.ultimates)
@@ -58,5 +58,5 @@
     <h3>Portrait (optional)</h3>
     <p>If you do not upload a portrait, your hero will appear as the base hero.</p>
     <input type="file" name="file" /><br>
-    <input type="submit">
+    <input class="btn btn-default" type="submit">
 </form>

@@ -4,8 +4,8 @@
 }
 <h2>Register</h2>
 <form asp-action="RegisterSubmit" asp-controller="User" method="POST">
-    Username: <input asp-for="username"> <span asp-validation-for="username"></span><br><br>
-    Password: <input asp-for="password"> <span asp-validation-for="password"></span><br><br>
-    Confirm Password: <input asp-for="pwconfirm"> <span asp-validation-for="pwconfirm"></span><br><br>
+    Username <br><input class='form-control' asp-for="username"> <span asp-validation-for="username"></span><br><br>
+    Password <br><input class='form-control' asp-for="password"> <span asp-validation-for="password"></span><br><br>
+    Confirm Password <br><input class='form-control' asp-for="pwconfirm"> <span asp-validation-for="pwconfirm"></span><br><br>
     <input type="submit">
 </form>

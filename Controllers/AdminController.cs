@@ -237,6 +237,36 @@ namespace DotaAPI.Controllers
             }
             return RedirectToAction("Main");
         }
+
+        [Route("admin/deletenew")]
+        public IActionResult DeleteNewHeroList()
+        {
+            List<New_Hero> heroes = _context.New_Heroes.ToList();
+            return View(heroes);
+        }
+
+        [HttpPost]
+        [Route("admin/deletenew/submit")]
+        public IActionResult DeleteNew(int id, string username, string password)
+        {
+            PasswordHasher<Admin> hasher = new PasswordHasher<Admin>();
+            Admin thisAdmin = _context.Admins.SingleOrDefault(a => a.username == username);
+            if(thisAdmin == null) return RedirectToAction("DeleteNewHeroList");
+            if(hasher.VerifyHashedPassword(thisAdmin, thisAdmin.password, password) == 0) return RedirectToAction("DeleteNewHeroList");
+            New_Hero heroToDelete = _context.New_Heroes.Single(n => n.id == id);
+            List<Vote> votesToDelete = _context.Votes.Where(v => v.new_hero_id == heroToDelete.id).ToList();
+            if(votesToDelete.Count > 0)
+            {
+                foreach(Vote v in votesToDelete)
+                {
+                    _context.Remove(v);
+                }
+            }
+            _context.SaveChanges();
+            _context.Remove(heroToDelete);
+            _context.SaveChanges();
+            return RedirectToAction("Main");
+        }
         
     }
 }
