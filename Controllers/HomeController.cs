@@ -19,13 +19,19 @@ namespace DotaAPI.Controllers
         {
             _context = context;
         }
+        
+        [Route("about")]
+        public IActionResult About()
+        {
+            return View();
+        }
 
         [Route("")]
-        public IActionResult Index()
+        public IActionResult Index() //front page
         {
             ViewBag.name = HttpContext.Session.GetString("username");
             List<New_Hero> newest = _context.New_Heroes.OrderByDescending(n => n.id).ToList();
-            List<New_Hero> fiveNewest = new List<New_Hero>();
+            List<New_Hero> fiveNewest = new List<New_Hero>(); //displays five newest custom heroes
             for(int i = 0; i < 5 && i < newest.Count; i++)
             {
                 fiveNewest.Add(newest[i]);
@@ -33,13 +39,15 @@ namespace DotaAPI.Controllers
             return View(fiveNewest);
         }
 
+        /*   custom hero list   */
+
         [Route("heroes")]
-        public IActionResult List()
+        public IActionResult List() //default display page for new heroes shows newest to oldest - can be sorted
         {
             return RedirectToAction("ListPage", new {sort = "recent"});
         }
 
-        [Route("heroes/{sort}")]
+        [Route("heroes/{sort}")] //sorts either by newest to oldest, or highest rated to lowest (unrated appear below 0% rating)
         public IActionResult ListPage(string sort, int page = 1)
         {
             List<New_Hero> heroes = new List<New_Hero>();
@@ -65,8 +73,10 @@ namespace DotaAPI.Controllers
             return View("List", heroesList);
         }
 
+        /*  custom hero display   */
+
         [Route("hero/{id}")]
-        public IActionResult HeroPage(int id)
+        public IActionResult HeroPage(int id) //display page for custom hero
         {
             New_Hero heroToDisplay = _context.New_Heroes.SingleOrDefault(h => h.id == id);
             if(heroToDisplay == null) return View("HeroNotFound");
@@ -76,7 +86,7 @@ namespace DotaAPI.Controllers
             Spell spell3 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_3_id);
             Spell spell4 = _context.Spells.SingleOrDefault(s => s.id == heroToDisplay.spell_4_id);
             ViewBag.base_id = heroToDisplay.hero_id;
-            if(heroToDisplay.img == null)
+            if(heroToDisplay.img == null) //uses base hero portrait if creator did not upload their own
             {
                 ViewBag.img = baseHero.img;
                 ViewBag.user_image = false;
@@ -94,7 +104,7 @@ namespace DotaAPI.Controllers
             }
             ViewBag.loggedUser = HttpContext.Session.GetString("username");
             decimal rating = 0;
-            List<Vote> votes = _context.Votes.Where(v => v.new_hero_id == id).ToList();
+            List<Vote> votes = _context.Votes.Where(v => v.new_hero_id == id).ToList(); //get hero rating
             if(votes.Count == 0)
             {
                 ViewBag.rating = null;
@@ -113,31 +123,10 @@ namespace DotaAPI.Controllers
             else if(heroToDisplay == _context.New_Heroes.First()) ViewBag.position = "first";
             else ViewBag.position = "middle";
             */
-            return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4));
+            return View(Converter.ConvertHero(heroToDisplay, baseHero, spell1, spell2, spell3, spell4)); //converts to version formatted for display
         }
 
-        [Route("api/hero/{id}")]
-        public IActionResult Hero(int id)
-        {
-            Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
-            HeroWithSpells result = Converter.addSpells(thisHero, _context.Spells.Where(s => s.hero_id == id).ToList());
-            return Json(result);
-        }
-
-        [Route("api/spell/{id}")]
-        public IActionResult Spell(int id)
-        {
-            Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
-            var display = Converter.Convert(thisSpell);
-            display.hero = _context.Heroes.Single(h => h.id == thisSpell.hero_id).name;
-            return Json(display);
-        }
-
-        [Route("about")]
-        public IActionResult About()
-        {
-            return View();
-        }
+        /*   base hero/spell displays   */
 
         [Route("base/hero/{id}")]
         public IActionResult BaseHeroPage(int id)
@@ -164,6 +153,8 @@ namespace DotaAPI.Controllers
             ViewBag.img = thisSpell.img;
             return View(Converter.Convert(thisSpell));
         }
+
+        /*   voting   */
 
         [HttpPost]
         public IActionResult VoteUp(int id, string user)
@@ -233,6 +224,25 @@ namespace DotaAPI.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("HeroPage", new { id = id });
+        }
+
+        /*   API routes   */
+
+        [Route("api/hero/{id}")]
+        public IActionResult Hero(int id)
+        {
+            Hero thisHero = _context.Heroes.SingleOrDefault(h => h.id == id);
+            HeroWithSpells result = Converter.addSpells(thisHero, _context.Spells.Where(s => s.hero_id == id).ToList());
+            return Json(result);
+        }
+
+        [Route("api/spell/{id}")]
+        public IActionResult Spell(int id)
+        {
+            Spell thisSpell = _context.Spells.SingleOrDefault(s => s.id == id);
+            var display = Converter.Convert(thisSpell);
+            display.hero = _context.Heroes.Single(h => h.id == thisSpell.hero_id).name;
+            return Json(display);
         }
 
     }
