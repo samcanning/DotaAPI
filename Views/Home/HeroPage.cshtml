@@ -51,15 +51,40 @@ else
 }
 else
 {
-    <form class="voteButton" asp-controller="Home" asp-action="VoteUp" method="post">
-        <input hidden name="id" value="@Model.id">
-        <input hidden name="user" value="@ViewBag.loggedUser">
-        <input type="submit" value="👍">
-    </form>
-    <form class="voteButton" asp-controller="Home" asp-action="VoteDown" method="post">
-        <input hidden name="id" value="@Model.id">
-        <input hidden name="user" value="@ViewBag.loggedUser">
-        <input type="submit" value="👎">
-    </form>
+    if(ViewBag.existingVote == null)
+    {
+        <form class="voteButton" asp-controller="Home" asp-action="VoteUp" method="post">
+            <input hidden name="id" value="@Model.id">
+            <input hidden name="user" value="@ViewBag.loggedUser">
+            <input type="submit" value="👍">
+        </form>
+        <form class="voteButton" asp-controller="Home" asp-action="VoteDown" method="post">
+            <input hidden name="id" value="@Model.id">
+            <input hidden name="user" value="@ViewBag.loggedUser">
+            <input type="submit" value="👎">
+        </form>  
+    }
+    else
+    {
+        <p>You have voted this hero @ViewBag.existingVote.</p>
+        if(ViewBag.existingVote == "down")
+        {
+            <form class="voteButton" asp-controller="Home" asp-action="VoteUp" method="post">
+                <input hidden name="id" value="@Model.id">
+                <input hidden name="user" value="@ViewBag.loggedUser">
+                <input type="submit" value="👍">
+            </form>
+            <input type="submit" value="👎">
+        }
+        else
+        {
+            <input type="submit" value="👍">
+            <form class="voteButton" asp-controller="Home" asp-action="VoteDown" method="post">
+                <input hidden name="id" value="@Model.id">
+                <input hidden name="user" value="@ViewBag.loggedUser">
+                <input type="submit" value="👎">
+            </form>  
+        }
+    }
 }
 <p><a href="/heroes">Back</a></p>

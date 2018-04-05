@@ -102,9 +102,21 @@ namespace DotaAPI.Controllers
                 ViewBag.username = creator.username;
                 ViewBag.user_id = creator.id;
             }
-            ViewBag.loggedUser = HttpContext.Session.GetString("username");
+            ViewBag.loggedUser = null;
+            User logged = _context.Users.SingleOrDefault(u => u.username == HttpContext.Session.GetString("username"));
+            if(logged != null) ViewBag.loggedUser = logged.username;
             decimal rating = 0;
             List<Vote> votes = _context.Votes.Where(v => v.new_hero_id == id).ToList(); //get hero rating
+            ViewBag.existingVote = null;
+            if(logged != null)
+            {
+                Vote existingVote = votes.SingleOrDefault(v => v.user_id == logged.id);
+                if(existingVote != null)
+                {
+                    if(existingVote.value == 1) ViewBag.existingVote = "up";
+                    else ViewBag.existingVote = "down";
+                }
+            }
             if(votes.Count == 0)
             {
                 ViewBag.rating = null;
